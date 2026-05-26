@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import ContactForm from '../ContactForm'
+import TiltCard from '../TiltCard'
 
 function ScanlineOverlay() {
   return (
@@ -19,6 +20,71 @@ function Divider({ color, label }) {
     </div>
   )
 }
+
+/* pre-generated binary stream columns */
+const DATA_COLS = Array.from({ length: 7 }, (_, i) => ({
+  left: `${4 + i * 14}%`,
+  delay: `${i * 1.1}s`,
+  dur: `${7 + i * 0.9}s`,
+  digits: Array.from({ length: 16 }, (__, j) => ((i * 7 + j * 3) % 2 === 0 ? '1' : '0')).join(' '),
+}))
+
+function DataStream() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {DATA_COLS.map((col, i) => (
+        <div key={i} style={{
+          position: 'absolute', left: col.left, top: 0,
+          fontFamily: "'Share Tech Mono',monospace", fontSize: 10,
+          color: i % 2 === 0 ? 'rgba(0,255,245,0.18)' : 'rgba(255,0,160,0.18)',
+          lineHeight: 2, letterSpacing: '2px',
+          animation: `dataScroll ${col.dur} linear ${col.delay} infinite`,
+        }}>
+          {col.digits.split(' ').map((d, j) => <div key={j}>{d}</div>)}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CircuitChip({ skill, i }) {
+  const colors = ['#00fff5', '#ff00a0', '#f0ff00']
+  const color = colors[i % 3]
+  return (
+    <div className="cursor-default group flex flex-col items-center gap-2">
+      <div style={{
+        position: 'relative', width: 76, height: 66,
+        clipPath: 'polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)',
+        background: color,
+        animation: `neonPulse ${2 + (i % 3) * 0.7}s ease-in-out ${i * 0.18}s infinite`,
+        filter: `drop-shadow(0 0 5px ${color}80)`,
+        transition: 'filter 0.2s',
+      }}>
+        <div style={{
+          position: 'absolute', inset: 2,
+          clipPath: 'polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%)',
+          background: '#0a0a0f',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <div style={{ width: 16, height: 16, border: `1px solid ${color}`, transform: 'rotate(45deg)', boxShadow: `0 0 8px ${color}80` }} />
+        </div>
+      </div>
+      <span style={{ fontSize: 9, color, fontFamily: "'Share Tech Mono',monospace", fontWeight: 700, textAlign: 'center', maxWidth: 80, lineHeight: 1.3, textTransform: 'uppercase', letterSpacing: '1px' }}>
+        {skill}
+      </span>
+    </div>
+  )
+}
+
+/* floating neon shapes */
+const SHAPES = Array.from({ length: 8 }, (_, i) => ({
+  size: 12 + (i % 3) * 10,
+  left: `${8 + i * 12}%`,
+  top: `${10 + (i % 5) * 17}%`,
+  color: i % 2 === 0 ? 'rgba(0,255,245,0.3)' : 'rgba(255,0,160,0.3)',
+  delay: `${i * 0.8}s`,
+  dur: `${3 + i * 0.5}s`,
+}))
 
 export default function Cyberpunk({ data, slug }) {
   const { name, role, bio, email, skills, experience = [], projects, education = [], socials } = data
@@ -40,12 +106,34 @@ export default function Cyberpunk({ data, slug }) {
   return (
     <div className="relative min-h-screen w-full text-white overflow-hidden"
       style={{ width: '100%', background: '#0a0a0f', fontFamily: "'Rajdhani', sans-serif" }}>
+
+      {/* Grid bg */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ backgroundImage: `linear-gradient(rgba(0,255,245,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,245,0.04) 1px, transparent 1px)`, backgroundSize: '40px 40px', animation: 'gridMove 3s linear infinite' }} />
+
+      {/* Corner brackets */}
       <div className="absolute top-0 left-0 w-32 h-32 pointer-events-none" style={{ borderTop: `2px solid ${cyan}`, borderLeft: `2px solid ${cyan}` }} />
       <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none" style={{ borderTop: `2px solid ${magenta}`, borderRight: `2px solid ${magenta}` }} />
       <div className="absolute bottom-0 left-0 w-32 h-32 pointer-events-none" style={{ borderBottom: `2px solid ${magenta}`, borderLeft: `2px solid ${magenta}` }} />
       <div className="absolute bottom-0 right-0 w-32 h-32 pointer-events-none" style={{ borderBottom: `2px solid ${cyan}`, borderRight: `2px solid ${cyan}` }} />
+
+      {/* Floating neon shapes */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {SHAPES.map((s, i) => (
+          <div key={i} style={{
+            position: 'absolute', left: s.left, top: s.top,
+            width: s.size, height: s.size,
+            border: `1px solid ${s.color}`,
+            transform: i % 2 === 0 ? 'rotate(45deg)' : 'rotate(0deg)',
+            animation: `neonPulse ${s.dur} ease-in-out ${s.delay} infinite, floatY ${4 + i * 0.6}s ease-in-out ${s.delay} infinite`,
+          }} />
+        ))}
+        {/* neon horizontal streaks */}
+        <div style={{ position: 'absolute', top: '35%', left: 0, right: 0, height: '1px', background: `linear-gradient(90deg, transparent, ${cyan}20, transparent)`, animation: 'driftX 8s ease-in-out infinite' }} />
+        <div style={{ position: 'absolute', top: '65%', left: 0, right: 0, height: '1px', background: `linear-gradient(90deg, transparent, ${magenta}20, transparent)`, animation: 'driftX 10s ease-in-out 2s infinite reverse' }} />
+      </div>
+
+      <DataStream />
       <ScanlineOverlay />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-12">
@@ -68,16 +156,12 @@ export default function Cyberpunk({ data, slug }) {
           </div>
         </header>
 
-        {/* Skills */}
+        {/* Skills — circuit chips */}
         <section className="mb-20">
           <Divider color={cyan} label="<SKILLS/>" />
-          <div className="flex flex-wrap justify-center gap-3">
-            {skills.map((skill, i) => (
-              <span key={i} className="px-4 py-1 text-sm font-bold uppercase tracking-wider"
-                style={{ border: `1px solid ${i % 2 === 0 ? cyan : magenta}`, color: i % 2 === 0 ? cyan : magenta, background: i % 2 === 0 ? 'rgba(0,255,245,0.05)' : 'rgba(255,0,160,0.05)', fontFamily: "'Share Tech Mono', monospace" }}>
-                {skill}
-              </span>
-            ))}
+          <p className="text-center text-xs mb-6 tracking-widest uppercase" style={{ color: 'rgba(0,255,245,0.4)', fontFamily: "'Share Tech Mono',monospace" }}>{'// NEURAL CHIP ARRAY //'}</p>
+          <div className="flex flex-wrap justify-center gap-5">
+            {skills.map((skill, i) => <CircuitChip key={i} skill={skill} i={i} />)}
           </div>
         </section>
 
@@ -87,7 +171,7 @@ export default function Cyberpunk({ data, slug }) {
             <Divider color={magenta} label="<EXPERIENCE/>" />
             <div className="space-y-5">
               {experience.map((exp, i) => (
-                <div key={i} className="p-6 relative"
+                <TiltCard key={i} className="p-6 relative" intensity={7}
                   style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${i % 2 === 0 ? 'rgba(0,255,245,0.2)' : 'rgba(255,0,160,0.2)'}` }}>
                   <div className="absolute top-0 left-0 w-1 h-full" style={{ background: i % 2 === 0 ? cyan : magenta }} />
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-2 mb-3 pl-3">
@@ -100,7 +184,7 @@ export default function Cyberpunk({ data, slug }) {
                     </span>
                   </div>
                   <p className="text-gray-500 text-sm leading-relaxed pl-3">{exp.description}</p>
-                </div>
+                </TiltCard>
               ))}
             </div>
           </section>
@@ -111,13 +195,13 @@ export default function Cyberpunk({ data, slug }) {
           <Divider color={cyan} label="<PROJECTS/>" />
           <div className="grid md:grid-cols-3 gap-6">
             {projects.map((p, i) => (
-              <div key={i} className="p-6 transition-all hover:scale-105"
+              <TiltCard key={i} className="p-6" intensity={12}
                 style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid ${i % 2 === 0 ? 'rgba(0,255,245,0.3)' : 'rgba(255,0,160,0.3)'}` }}>
                 <div className="text-xs mb-3" style={{ color: cyan, fontFamily: "'Share Tech Mono', monospace" }}>{`// PROJECT_0${i + 1}`}</div>
                 <h3 className="text-lg font-black uppercase mb-3" style={{ color: yellow }}>{p.title}</h3>
                 <p className="text-gray-500 text-sm leading-relaxed mb-4">{p.description}</p>
                 {p.link && <a href={p.link} target="_blank" rel="noreferrer" className="text-xs uppercase tracking-widest" style={{ color: cyan, fontFamily: "'Share Tech Mono', monospace" }}>EXECUTE →</a>}
-              </div>
+              </TiltCard>
             ))}
           </div>
         </section>
@@ -128,7 +212,7 @@ export default function Cyberpunk({ data, slug }) {
             <Divider color={yellow} label="<EDUCATION/>" />
             <div className="grid md:grid-cols-2 gap-5">
               {education.map((edu, i) => (
-                <div key={i} className="p-5 flex items-start gap-4"
+                <TiltCard key={i} className="p-5 flex items-start gap-4" intensity={8}
                   style={{ background: 'rgba(255,255,255,0.02)', border: `1px solid rgba(240,255,0,0.2)` }}>
                   <div className="text-2xl">📡</div>
                   <div>
@@ -136,7 +220,7 @@ export default function Cyberpunk({ data, slug }) {
                     <p className="text-xs mt-1 uppercase tracking-widest" style={{ color: cyan, fontFamily: "'Share Tech Mono', monospace" }}>{edu.institution}</p>
                     <p className="text-xs mt-1" style={{ color: 'rgba(240,255,0,0.5)', fontFamily: "'Share Tech Mono', monospace" }}>{edu.year}</p>
                   </div>
-                </div>
+                </TiltCard>
               ))}
             </div>
           </section>

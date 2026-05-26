@@ -97,6 +97,60 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.4; }
+  50% { transform: translateY(-24px) rotate(180deg); opacity: 0.8; }
+}
+@keyframes driftX {
+  0%, 100% { transform: translateX(0px); }
+  50% { transform: translateX(30px); }
+}
+@keyframes shootingStar {
+  0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 1; width: 0; }
+  70% { opacity: 1; width: 120px; }
+  100% { transform: translateX(300px) translateY(120px) rotate(-35deg); opacity: 0; width: 120px; }
+}
+@keyframes neonPulse {
+  0%, 100% { opacity: 0.4; box-shadow: 0 0 6px currentColor; }
+  50% { opacity: 1; box-shadow: 0 0 18px currentColor; }
+}
+@keyframes jellyFloat {
+  0%, 100% { transform: translateY(0) scaleX(1); }
+  50% { transform: translateY(-20px) scaleX(1.08); }
+}
+@keyframes inkDrop {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+@keyframes swimRight {
+  0%   { transform: translateX(-120px); }
+  100% { transform: translateX(110vw); }
+}
+@keyframes swimLeft {
+  0%   { transform: translateX(110vw) scaleX(-1); }
+  100% { transform: translateX(-120px) scaleX(-1); }
+}
+@keyframes sway {
+  0%, 100% { transform-origin: bottom center; transform: rotate(-6deg); }
+  50%       { transform-origin: bottom center; transform: rotate(6deg); }
+}
+@keyframes orbitSpin {
+  from { transform: rotate(0deg) translateX(var(--orbit-r,60px)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(var(--orbit-r,60px)) rotate(-360deg); }
+}
+@keyframes craneFloat {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50%       { transform: translateY(-18px) rotate(5deg); }
+}
+@keyframes dataScroll {
+  0%   { transform: translateY(-100%); opacity: 0.3; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+@keyframes circuitPulse {
+  0%, 100% { opacity: 0.15; }
+  50%       { opacity: 0.5; }
+}
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
