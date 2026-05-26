@@ -9,6 +9,7 @@ const connectOnce = async () => {
 
 // Vercel serverless export
 module.exports = async (req, res) => {
+  if (req.method === 'OPTIONS') return app(req, res)
   await connectOnce()
   return app(req, res)
 }

@@ -1,12 +1,12 @@
-const { PDFParse } = require('pdf-parse')
+const pdfParse = require('pdf-parse')
 const Groq = require('groq-sdk')
 
 async function parseResume(req, res) {
   try {
     if (!req.file) return res.status(400).json({ error: 'PDF file is required' })
 
-    const parser = new PDFParse({ data: req.file.buffer })
-    const resumeText = (await parser.getText()).text.trim()
+    const { text } = await pdfParse(req.file.buffer)
+    const resumeText = text.trim()
 
     if (!resumeText) return res.status(422).json({ error: 'Could not extract text from PDF' })
 
