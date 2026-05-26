@@ -18,7 +18,8 @@ const corsOptions = {
   origin: (origin, cb) => {
     if (!origin) return cb(null, true)
     const clean = origin.replace(/\/$/, '')
-    if (allowedOrigins.includes(clean) || clean.endsWith('.vercel.app')) {
+    const isLocalhost = clean.startsWith('http://localhost:') || clean.startsWith('http://127.0.0.1:')
+    if (isLocalhost || allowedOrigins.includes(clean) || clean.endsWith('.vercel.app')) {
       return cb(null, true)
     }
     cb(new Error(`CORS: origin ${origin} not allowed`))
