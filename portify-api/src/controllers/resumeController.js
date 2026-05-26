@@ -1,7 +1,8 @@
-const pdfjsLib = require('pdfjs-dist/legacy/build/pdf.js')
 const Groq = require('groq-sdk')
 
 async function extractText(buffer) {
+  // lazy require so a load failure only breaks this route, not the whole app
+  const pdfjsLib = require('pdfjs-dist/legacy/build/pdf.js')
   const data = new Uint8Array(buffer)
   const pdf = await pdfjsLib.getDocument({ data, useWorkerFetch: false, isEvalSupported: false, useSystemFonts: true }).promise
   const pages = []
