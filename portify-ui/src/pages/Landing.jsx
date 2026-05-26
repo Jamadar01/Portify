@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePortfolioStore } from '../lib/portfolioStore'
+import { useAuthStore } from '../lib/authStore'
+import AuthModal from '../components/AuthModal'
 
 const themes = [
   {
@@ -49,6 +52,13 @@ const themes = [
 export default function Landing() {
   const navigate = useNavigate()
   const { setTheme, setStep } = usePortfolioStore()
+  const { token, user, logout } = useAuthStore()
+  const [showAuth, setShowAuth] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
+
+  const initials = user?.name
+    ? user.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
+    : '?'
 
   const handleSelect = (id) => {
     setTheme(id)
@@ -65,6 +75,10 @@ export default function Landing() {
       className="min-h-screen w-full"
       style={{ width: '100%', background: '#070810', fontFamily: "'Space Grotesk', sans-serif", color: '#fff' }}
     >
+      {showAuth && (
+        <AuthModal onClose={() => setShowAuth(false)} onSuccess={() => setShowAuth(false)} />
+      )}
+
       {/* Header */}
       <header className="flex items-center justify-between px-8 py-6 border-b border-white/5">
         <div className="flex items-center gap-3">
@@ -74,10 +88,66 @@ export default function Landing() {
           </div>
           <span className="font-bold text-lg tracking-tight">Portify</span>
         </div>
+
         <nav className="hidden md:flex gap-8 text-sm text-white/50">
           <a href="#themes" className="hover:text-white transition-colors">Themes</a>
           <a href="#how" className="hover:text-white transition-colors">How it works</a>
         </nav>
+
+        {/* Auth area */}
+        {token ? (
+          <div className="relative">
+            <button
+              onClick={() => setShowMenu(v => !v)}
+              className="flex items-center gap-2.5 px-3 py-1.5 rounded-full transition-all hover:bg-white/5"
+              style={{ border: '1px solid rgba(255,255,255,0.1)' }}
+            >
+              <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                style={{ background: 'linear-gradient(135deg,#7c3aed,#a855f7)', color: '#fff' }}>
+                {initials}
+              </div>
+              <span className="text-sm text-white/80 hidden sm:block max-w-[120px] truncate">
+                {user?.name || 'Account'}
+              </span>
+              <span className="text-white/30 text-xs">{showMenu ? '▲' : '▼'}</span>
+            </button>
+
+            {showMenu && (
+              <>
+                {/* backdrop */}
+                <div className="fixed inset-0 z-10" onClick={() => setShowMenu(false)} />
+                <div className="absolute right-0 mt-2 w-48 rounded-xl overflow-hidden z-20"
+                  style={{ background: '#131520', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 16px 40px rgba(0,0,0,0.5)' }}>
+                  <div className="px-4 py-3 border-b border-white/5">
+                    <p className="text-xs font-semibold text-white truncate">{user?.name}</p>
+                    <p className="text-xs text-white/30 truncate mt-0.5">{user?.email}</p>
+                  </div>
+                  <button onClick={() => { setShowMenu(false); navigate('/dashboard') }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2">
+                    <span>🗂</span> My Dashboard
+                  </button>
+                  <button onClick={() => { setShowMenu(false); navigate('/builder') }}
+                    className="w-full text-left px-4 py-2.5 text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2">
+                    <span>✏️</span> Edit Portfolio
+                  </button>
+                  <div className="border-t border-white/5">
+                    <button onClick={() => { setShowMenu(false); logout() }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-400/70 hover:text-red-400 hover:bg-red-400/5 transition-colors flex items-center gap-2">
+                      <span>→</span> Sign Out
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowAuth(true)}
+            className="px-4 py-2 rounded-full text-sm font-medium transition-all hover:brightness-110"
+            style={{ background: 'linear-gradient(135deg,#7c3aed,#a855f7)', color: '#fff' }}>
+            Sign In
+          </button>
+        )}
       </header>
 
       {/* Hero */}

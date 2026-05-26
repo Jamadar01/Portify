@@ -140,11 +140,15 @@ export default function Preview() {
           ) : published ? (
             <>
               <span className="text-xs text-green-400">Published!</span>
-              <button
-                onClick={copyPublicLink}
+              <button onClick={copyPublicLink}
+                className="px-4 py-1.5 rounded-lg text-xs border text-white/50 hover:text-white hover:border-white/30 transition-all"
+                style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+                {copyLabel}
+              </button>
+              <button onClick={() => navigate('/dashboard')}
                 className="px-4 py-1.5 rounded-lg text-xs font-semibold text-white transition-all hover:brightness-110"
                 style={{ background: 'linear-gradient(135deg,#7c3aed,#a855f7)' }}>
-                {copyLabel}
+                My Dashboard →
               </button>
             </>
           ) : (

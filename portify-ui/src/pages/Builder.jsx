@@ -229,14 +229,22 @@ export default function Builder() {
     >
       {/* Nav */}
       <div className="flex items-center justify-between max-w-3xl mx-auto mb-8">
-        <button onClick={() => navigate('/')}
+        <button onClick={() => navigate(-1)}
           className="flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors">
           ← Back
         </button>
-        <div className="flex items-center gap-2 text-sm font-bold">
-          <div className="w-6 h-6 rounded flex items-center justify-center text-xs"
-            style={{ background: 'linear-gradient(135deg, #7c3aed, #a855f7)' }}>P</div>
-          Portify
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-sm font-bold">
+            <div className="w-6 h-6 rounded flex items-center justify-center text-xs"
+              style={{ background: 'linear-gradient(135deg, #7c3aed, #a855f7)' }}>P</div>
+            Portify
+          </div>
+          {token && (
+            <button onClick={() => navigate('/dashboard')}
+              className="text-xs text-white/40 hover:text-violet-400 transition-colors">
+              Dashboard
+            </button>
+          )}
         </div>
       </div>
 
@@ -368,7 +376,7 @@ export default function Builder() {
               </div>
 
               <div className="flex gap-4 pt-4">
-                <button type="button" onClick={() => setStep(1)}
+                <button type="button" onClick={() => navigate(-1)}
                   className="px-6 py-3 rounded-xl text-sm border border-white/10 text-white/60 hover:text-white hover:border-white/20 transition-all">
                   ← Back
                 </button>
