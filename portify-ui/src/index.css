@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&family=Fira+Code:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    scroll-behavior: smooth;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
+  }
+}
+
+/* Cosmic */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+@keyframes floatParticle {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+}
+@keyframes nebulaPulse {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
+}
+@keyframes heroGlow {
+  0%, 100% { text-shadow: 0 0 20px #a855f7, 0 0 40px #7c3aed; }
+  50% { text-shadow: 0 0 40px #a855f7, 0 0 80px #7c3aed, 0 0 120px #4c1d95; }
+}
+
+/* Cyberpunk */
+@keyframes glitch {
+  0%, 100% { transform: translate(0); filter: none; }
+  10% { transform: translate(-4px, 2px); filter: hue-rotate(90deg); }
+  20% { transform: translate(4px, -2px); }
+  30% { transform: translate(-2px, 4px); filter: hue-rotate(-90deg); }
+  40% { transform: translate(2px, -4px); }
+  50% { transform: translate(0); filter: none; }
+  55% { transform: translate(3px, 1px); clip-path: polygon(0 40%, 100% 40%, 100% 60%, 0 60%); }
+  60% { transform: translate(-3px, -1px); clip-path: none; }
+  70% { transform: translate(0); }
+}
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes neonFlicker {
+  0%, 89%, 91%, 93%, 100% { opacity: 1; }
+  90%, 92% { opacity: 0.3; }
+}
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+/* Ocean */
+@keyframes wave {
+  0% { transform: translateX(0) scaleY(1); }
+  50% { transform: translateX(-25%) scaleY(0.85); }
+  100% { transform: translateX(-50%) scaleY(1); }
+}
+@keyframes bubble {
+  0% { transform: translateY(0) scale(1); opacity: 0.6; }
+  100% { transform: translateY(-100vh) scale(1.8); opacity: 0; }
+}
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -40px) scale(1.1); }
+  66% { transform: translate(-30px, 30px) scale(0.95); }
+}
+
+/* Paper */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes inkReveal {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Shared */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
