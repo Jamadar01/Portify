@@ -89,6 +89,34 @@ function Bubbles() {
   )
 }
 
+function SandFloor() {
+  return (
+    <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: 95 }}>
+      <svg style={{ position:'absolute', bottom:0, left:0, width:'100%', height:95 }} viewBox="0 0 1200 95" preserveAspectRatio="none">
+        <path d="M0 48 Q150 28 300 44 Q450 60 600 38 Q750 20 900 42 Q1050 60 1200 44 L1200 95 L0 95 Z" fill="rgba(180,140,80,0.22)" />
+        <path d="M0 63 Q200 52 400 62 Q600 74 800 56 Q1000 42 1200 58 L1200 95 L0 95 Z" fill="rgba(155,115,55,0.18)" />
+        <path d="M0 76 Q300 70 600 74 Q900 78 1200 72 L1200 95 L0 95 Z" fill="rgba(130,95,45,0.14)" />
+        {/* sand ripples */}
+        {[70,190,330,480,630,775,920,1060].map((x,i) => (
+          <ellipse key={i} cx={x} cy={58+(i%3)*4} rx={28+(i%4)*8} ry={3} fill="none" stroke="rgba(210,170,90,0.14)" strokeWidth="1" />
+        ))}
+        {/* pebbles / shells */}
+        {[110,260,420,590,750,900,1070].map((x,i) => (
+          <ellipse key={i} cx={x} cy={66+(i%3)*5} rx={4+(i%3)} ry={2.5} fill="rgba(210,175,95,0.22)" />
+        ))}
+        {/* starfish */}
+        {[330,720,1050].map((x,i) => (
+          <g key={i} transform={`translate(${x},72)`} opacity="0.25">
+            {[0,72,144,216,288].map(a => (
+              <line key={a} x1={0} y1={0} x2={Math.cos(a*Math.PI/180)*7} y2={Math.sin(a*Math.PI/180)*7} stroke="#d4a060" strokeWidth="1.5" strokeLinecap="round" />
+            ))}
+          </g>
+        ))}
+      </svg>
+    </div>
+  )
+}
+
 function WaveBottom() {
   return (
     <div className="absolute bottom-0 left-0 right-0 overflow-hidden pointer-events-none" style={{ height: 120 }}>
@@ -262,6 +290,7 @@ export default function DeepOcean({ data, slug }) {
         </section>
       </div>
 
+      <SandFloor />
       <WaveBottom />
       <div className="relative z-10 text-center pb-6 text-xs" style={{ color:'rgba(0,229,204,0.3)' }}>Built with Portify</div>
     </div>

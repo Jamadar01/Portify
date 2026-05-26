@@ -11,6 +11,47 @@ function Divider({ label }) {
   )
 }
 
+function PaperMeadow() {
+  const stems = Array.from({length:35}, (_,i) => ({ x:(i*36+8)%1200, h:10+(i%5)*5, lean:(i%3-1)*4 }))
+  const flowers = [75,215,380,545,695,845,1000,1130]
+  return (
+    <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: 72 }}>
+      <svg style={{ position:'absolute', bottom:0, left:0, width:'100%', height:72 }} viewBox="0 0 1200 72" preserveAspectRatio="none">
+        <path d="M0 50 Q300 44 600 48 Q900 52 1200 46 L1200 72 L0 72 Z" fill="rgba(139,105,20,0.07)" />
+        <path d="M0 58 Q400 54 800 57 Q1000 59 1200 56 L1200 72 L0 72 Z" fill="rgba(139,105,20,0.05)" />
+        {stems.map((s,i) => (
+          <path key={i} d={`M${s.x} 52 Q${s.x+s.lean} ${52-s.h*0.55} ${s.x+s.lean*1.6} ${52-s.h}`}
+            stroke="rgba(139,105,20,0.17)" strokeWidth="1.4" strokeLinecap="round" fill="none" />
+        ))}
+        {flowers.map((x,i) => (
+          <g key={i}>
+            <line x1={x} y1={52} x2={x} y2={37} stroke="rgba(139,105,20,0.22)" strokeWidth="1" />
+            {[0,60,120,180,240,300].map(deg => (
+              <ellipse key={deg}
+                cx={x+Math.cos(deg*Math.PI/180)*4.8} cy={37+Math.sin(deg*Math.PI/180)*4.8}
+                rx="2.8" ry="1.6"
+                fill={i%3===0?'rgba(200,169,110,0.32)':i%3===1?'rgba(180,140,80,0.28)':'rgba(220,180,120,0.30)'}
+                transform={`rotate(${deg} ${x+Math.cos(deg*Math.PI/180)*4.8} ${37+Math.sin(deg*Math.PI/180)*4.8})`}
+              />
+            ))}
+            <circle cx={x} cy={37} r="2.8" fill="rgba(200,169,110,0.38)" />
+          </g>
+        ))}
+        {/* scattered seeds / dandelion dots */}
+        {[150,310,470,640,800,960,1090].map((x,i) => (
+          <g key={i} opacity="0.18">
+            {[0,45,90,135,180,225,270,315].map(a => (
+              <line key={a} x1={x} y1={44} x2={x+Math.cos(a*Math.PI/180)*5} y2={44+Math.sin(a*Math.PI/180)*5}
+                stroke="#8b6914" strokeWidth="0.8" />
+            ))}
+            <circle cx={x} cy={44} r="1.2" fill="#c8a96e" />
+          </g>
+        ))}
+      </svg>
+    </div>
+  )
+}
+
 const WATERCOLOR = [
   { left:'-6%',  top:'22%', w:240, h:170, color:'rgba(200,169,110,0.07)', delay:'0s',  dur:'17s' },
   { left:'74%',  top:'52%', w:270, h:190, color:'rgba(139,105,20,0.06)',  delay:'6s',  dur:'21s' },
@@ -282,6 +323,7 @@ export default function MinimalPaper({ data, slug }) {
         </footer>
       </div>
 
+      <PaperMeadow />
       <div className="h-1 relative" style={{ background: `linear-gradient(90deg, ${lightGold}, ${gold}, ${lightGold})` }} />
     </div>
   )

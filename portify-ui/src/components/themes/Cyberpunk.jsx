@@ -114,6 +114,40 @@ const PINGS = [
   { left:'70%', top:'15%', color:'#f0ff00', delay:'2.5s', dur:'6s'   },
 ]
 
+/* city skyline */
+function CitySkyline() {
+  const blds = [
+    [0,52,108],[57,32,72],[94,68,145],[167,42,88],[214,62,128],
+    [281,38,80],[324,85,168],[414,48,102],[467,65,138],
+    [538,36,76],[579,92,158],[676,52,112],[733,46,90],
+    [784,78,145],[867,55,118],[927,40,86],[972,62,135],[1038,30,68],[1072,48,96],[1124,26,62],[1154,44,88],
+  ]
+  return (
+    <div className="absolute bottom-0 left-0 right-0 pointer-events-none overflow-hidden" style={{ height: 185 }}>
+      <svg style={{ position:'absolute', bottom:0, left:0, width:'100%', height:185 }} viewBox="0 0 1200 185" preserveAspectRatio="none">
+        {blds.map(([x,w,h],i) => (
+          <g key={i}>
+            <rect x={x} y={185-h} width={w} height={h} fill={i%3===0?'rgba(0,4,14,0.94)':i%3===1?'rgba(2,0,10,0.96)':'rgba(0,6,16,0.9)'} />
+            {i%4===0 && <line x1={x+w/2} y1={185-h-1} x2={x+w/2} y2={185-h-14} stroke={i%2===0?'#00fff5':'#ff00a0'} strokeWidth="1.5" opacity="0.55" />}
+            {i%4===0 && <circle cx={x+w/2} cy={185-h-14} r="1.5" fill={i%2===0?'#00fff5':'#ff00a0'} opacity="0.7" />}
+            {Array.from({length:Math.floor((h-8)/13)},(__,row) =>
+              Array.from({length:Math.floor((w-4)/11)},(_,col) => {
+                const v = Math.abs(i*7+row*3+col*5)%6
+                return <rect key={`${row}-${col}`} x={x+3+col*11} y={185-h+6+row*13} width={5} height={4}
+                  fill={v===0?'rgba(0,255,245,0.5)':v===1?'rgba(255,0,160,0.4)':v===2?'rgba(240,255,0,0.35)':'rgba(255,255,255,0.04)'} />
+              })
+            )}
+          </g>
+        ))}
+        <rect x={0} y={183} width={1200} height={2} fill="#00fff5" opacity="0.4" />
+      </svg>
+      {/* street neon glow */}
+      <div style={{ position:'absolute', bottom:0, left:0, right:0, height:22, background:'linear-gradient(180deg,transparent,rgba(0,255,245,0.1))' }} />
+      <div style={{ position:'absolute', bottom:2, left:0, right:0, height:8, background:'linear-gradient(90deg,rgba(0,255,245,0.05),rgba(255,0,160,0.05),rgba(240,255,0,0.05),rgba(0,255,245,0.05))', filter:'blur(4px)' }} />
+    </div>
+  )
+}
+
 /* floating neon shapes */
 const SHAPES = Array.from({ length: 8 }, (_, i) => ({
   size: 12 + (i % 3) * 10,
@@ -305,6 +339,7 @@ export default function Cyberpunk({ data, slug }) {
           {'// BUILT WITH PORTIFY — SYSTEM_END'}
         </footer>
       </div>
+      <CitySkyline />
     </div>
   )
 }

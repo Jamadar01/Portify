@@ -116,6 +116,35 @@ function Constellation({ skills }) {
   )
 }
 
+function MoonSurface() {
+  return (
+    <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: 115 }}>
+      <svg style={{ position:'absolute', bottom:0, left:0, width:'100%', height:115 }} viewBox="0 0 1200 115" preserveAspectRatio="none">
+        {/* rocky horizon ridges */}
+        <path d="M0 58 Q80 40 160 54 Q260 70 360 48 Q460 30 560 52 Q660 72 760 52 Q860 34 960 55 Q1060 72 1130 54 Q1165 46 1200 52 L1200 115 L0 115 Z" fill="rgba(40,0,80,0.6)" />
+        <path d="M0 72 Q110 62 230 70 Q390 80 540 66 Q680 54 820 70 Q960 84 1110 70 L1200 72 L1200 115 L0 115 Z" fill="rgba(20,0,50,0.7)" />
+        {/* craters */}
+        {[[120,56],[370,48],[640,52],[900,56],[1090,50]].map(([x,y],i) => (
+          <g key={i}>
+            <ellipse cx={x} cy={y} rx={13+i*2} ry={4.5} fill="rgba(0,0,0,0.35)" />
+            <ellipse cx={x} cy={y} rx={13+i*2} ry={4.5} fill="none" stroke="rgba(168,85,247,0.28)" strokeWidth="1" />
+            <ellipse cx={x} cy={y} rx={6+i} ry={2} fill="rgba(80,0,140,0.2)" />
+          </g>
+        ))}
+        {/* boulders */}
+        {[[210,54],[490,46],[740,51],[1010,57]].map(([x,y],i) => (
+          <polygon key={i} points={`${x-7},${y} ${x+7},${y} ${x+4},${y-11} ${x-4},${y-12}`} fill="rgba(60,5,110,0.55)" />
+        ))}
+        {/* distant ridge silhouette */}
+        <path d="M0 68 Q60 52 120 62 Q180 72 240 57 Q300 44 360 60 Q420 75 480 60 Q540 46 600 62 Q660 76 720 60 Q780 46 840 62 Q900 76 960 62 Q1020 48 1080 62 Q1140 75 1200 62" fill="none" stroke="rgba(100,15,190,0.2)" strokeWidth="2" />
+      </svg>
+      {/* purple horizon glow */}
+      <div style={{ position:'absolute', bottom:33, left:0, right:0, height:2, background:'linear-gradient(90deg,transparent,rgba(168,85,247,0.35),rgba(124,58,237,0.5),rgba(168,85,247,0.35),transparent)' }} />
+      <div style={{ position:'absolute', bottom:0, left:'15%', right:'15%', height:35, background:'radial-gradient(ellipse,rgba(124,58,237,0.18) 0%,transparent 70%)', filter:'blur(10px)' }} />
+    </div>
+  )
+}
+
 function SectionTitle({ children }) {
   return (
     <h2 className="text-center text-2xl font-bold mb-10 tracking-widest uppercase"
@@ -278,6 +307,7 @@ export default function Cosmic({ data, slug }) {
 
         <footer className="text-center pb-10 text-gray-700 text-xs">Built with Portify</footer>
       </div>
+      <MoonSurface />
     </div>
   )
 }
