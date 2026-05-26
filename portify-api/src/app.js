@@ -12,19 +12,24 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:4173',
   process.env.CLIENT_URL,
-].filter(Boolean)
+].filter(Boolean).map(o => o.replace(/\/$/, ''))
 
-app.use(cors({
+const corsOptions = {
   origin: (origin, cb) => {
-    // allow requests with no origin (mobile apps, curl, Postman)
     if (!origin) return cb(null, true)
-    if (allowedOrigins.some(o => origin.startsWith(o)) || origin.endsWith('.vercel.app')) {
+    const clean = origin.replace(/\/$/, '')
+    if (allowedOrigins.includes(clean) || clean.endsWith('.vercel.app')) {
       return cb(null, true)
     }
     cb(new Error(`CORS: origin ${origin} not allowed`))
   },
   credentials: true,
-}))
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}
+
+app.use(cors(corsOptions))
+app.options('*', cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
