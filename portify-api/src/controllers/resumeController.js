@@ -1,12 +1,23 @@
-const pdfParse = require('pdf-parse')
+const pdfjsLib = require('pdfjs-dist/legacy/build/pdf.js')
 const Groq = require('groq-sdk')
+
+async function extractText(buffer) {
+  const data = new Uint8Array(buffer)
+  const pdf = await pdfjsLib.getDocument({ data, useWorkerFetch: false, isEvalSupported: false, useSystemFonts: true }).promise
+  const pages = []
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i)
+    const content = await page.getTextContent()
+    pages.push(content.items.map(s => s.str).join(' '))
+  }
+  return pages.join('\n')
+}
 
 async function parseResume(req, res) {
   try {
     if (!req.file) return res.status(400).json({ error: 'PDF file is required' })
 
-    const { text } = await pdfParse(req.file.buffer)
-    const resumeText = text.trim()
+    const resumeText = (await extractText(req.file.buffer)).trim()
 
     if (!resumeText) return res.status(422).json({ error: 'Could not extract text from PDF' })
 
