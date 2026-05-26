@@ -30,6 +30,32 @@ function StarField() {
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
 }
 
+/* Distant galaxy spirals */
+function GalaxySpiral({ left, top, size, opacity }) {
+  return (
+    <svg style={{ position:'absolute', left, top, opacity, pointerEvents:'none' }} width={size} height={size} viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="2.5" fill="rgba(192,132,252,0.95)" />
+      <ellipse cx="50" cy="50" rx="20" ry="8"  fill="none" stroke="rgba(168,85,247,0.55)" strokeWidth="1"   transform="rotate(-35 50 50)" />
+      <ellipse cx="50" cy="50" rx="36" ry="14" fill="none" stroke="rgba(168,85,247,0.28)" strokeWidth="0.8" transform="rotate(-35 50 50)" />
+      <ellipse cx="50" cy="50" rx="48" ry="18" fill="none" stroke="rgba(168,85,247,0.12)" strokeWidth="0.5" transform="rotate(-35 50 50)" />
+    </svg>
+  )
+}
+
+const GALAXIES = [
+  { left:'2%',  top:'40%', size:72, opacity:0.38 },
+  { left:'87%', top:'16%', size:56, opacity:0.30 },
+  { left:'14%', top:'76%', size:48, opacity:0.24 },
+  { left:'79%', top:'66%', size:64, opacity:0.32 },
+  { left:'50%', top:'88%', size:44, opacity:0.20 },
+]
+
+const AURORA_BANDS = [
+  { top:'10%', h:100, c1:'rgba(168,85,247,0.07)', c2:'rgba(99,102,241,0.05)',  delay:'0s',  dur:'15s' },
+  { top:'42%', h:80,  c1:'rgba(124,58,237,0.05)', c2:'rgba(192,132,252,0.06)', delay:'5s',  dur:'11s' },
+  { top:'68%', h:90,  c1:'rgba(79,70,229,0.06)',  c2:'rgba(168,85,247,0.05)',  delay:'9s',  dur:'18s' },
+]
+
 const SHOOTS = [
   { top:'8%',  left:'5%',  dur:'7s',  delay:'0s'  },
   { top:'22%', left:'20%', dur:'9s',  delay:'4s'  },
@@ -127,6 +153,25 @@ export default function Cosmic({ data, slug }) {
       {/* Planets */}
       <div className="absolute inset-0 pointer-events-none">
         {PLANETS.map((p, i) => <Planet key={i} p={p} />)}
+      </div>
+
+      {/* Aurora bands */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {AURORA_BANDS.map((a, i) => (
+          <div key={i} style={{ position:'absolute', top:a.top, left:'-25%', right:'-25%', height:a.h, background:`linear-gradient(180deg,transparent,${a.c1},${a.c2},transparent)`, filter:'blur(35px)', animation:`auroraShift ${a.dur} ease-in-out ${a.delay} infinite` }} />
+        ))}
+      </div>
+
+      {/* Distant galaxies */}
+      <div className="absolute inset-0 pointer-events-none">
+        {GALAXIES.map((g, i) => <GalaxySpiral key={i} {...g} />)}
+      </div>
+
+      {/* Extra nebula clouds */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div style={{ position:'absolute', bottom:'5%', left:'10%', width:320, height:200, background:'radial-gradient(ellipse,rgba(124,58,237,0.08) 0%,transparent 70%)', filter:'blur(50px)', animation:'orbFloat 20s ease-in-out 2s infinite' }} />
+        <div style={{ position:'absolute', top:'30%', left:'45%', width:240, height:160, background:'radial-gradient(ellipse,rgba(168,85,247,0.06) 0%,transparent 70%)', filter:'blur(40px)', animation:'orbFloat 16s ease-in-out 7s infinite reverse' }} />
+        <div style={{ position:'absolute', top:'60%', right:'5%', width:200, height:140, background:'radial-gradient(ellipse,rgba(99,102,241,0.08) 0%,transparent 70%)', filter:'blur(45px)', animation:'nebulaPulse 12s ease-in-out 4s infinite' }} />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-12">

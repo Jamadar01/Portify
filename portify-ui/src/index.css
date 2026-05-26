@@ -159,3 +159,15 @@
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes radarPing {
+  0% { transform: translate(-50%,-50%) scale(0.3); opacity: 0.7; }
+  100% { transform: translate(-50%,-50%) scale(4); opacity: 0; }
+}
+@keyframes auroraShift {
+  0%, 100% { transform: translateX(0) scaleX(1); opacity: 0.8; }
+  50% { transform: translateX(80px) scaleX(1.12); opacity: 1; }
+}
+@keyframes lightRay {
+  0%, 100% { opacity: 0.5; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.1); }
+}

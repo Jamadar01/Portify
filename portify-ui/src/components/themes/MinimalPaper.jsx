@@ -11,6 +11,29 @@ function Divider({ label }) {
   )
 }
 
+const WATERCOLOR = [
+  { left:'-6%',  top:'22%', w:240, h:170, color:'rgba(200,169,110,0.07)', delay:'0s',  dur:'17s' },
+  { left:'74%',  top:'52%', w:270, h:190, color:'rgba(139,105,20,0.06)',  delay:'6s',  dur:'21s' },
+  { left:'28%',  top:'8%',  w:190, h:140, color:'rgba(220,180,100,0.05)', delay:'11s', dur:'14s' },
+  { left:'55%',  top:'78%', w:200, h:150, color:'rgba(180,140,80,0.05)',  delay:'4s',  dur:'19s' },
+]
+
+function BotanicalBranch({ flip, style }) {
+  return (
+    <svg viewBox="0 0 100 240" fill="none" style={{ ...style, transform: flip ? 'scaleX(-1)' : undefined, pointerEvents:'none' }}>
+      <path d="M52 240 Q50 185 48 130 Q46 82 44 35" stroke="rgba(139,105,20,0.13)" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M48 175 Q32 155 20 150"  stroke="rgba(139,105,20,0.10)" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M47 130 Q63 112 76 106"  stroke="rgba(139,105,20,0.10)" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M45 90  Q30 72 21 62"   stroke="rgba(139,105,20,0.08)" strokeWidth="1"   strokeLinecap="round" />
+      <path d="M46 58  Q60 44 72 37"   stroke="rgba(139,105,20,0.08)" strokeWidth="1"   strokeLinecap="round" />
+      <ellipse cx="18" cy="148" rx="7" ry="3"   fill="rgba(139,105,20,0.09)" transform="rotate(-22 18 148)" />
+      <ellipse cx="78" cy="104" rx="7" ry="3"   fill="rgba(139,105,20,0.09)" transform="rotate(16 78 104)" />
+      <ellipse cx="19" cy="60"  rx="5.5" ry="2.5" fill="rgba(139,105,20,0.07)" transform="rotate(-28 19 60)" />
+      <ellipse cx="74" cy="35"  rx="5.5" ry="2.5" fill="rgba(139,105,20,0.07)" transform="rotate(18 74 35)" />
+    </svg>
+  )
+}
+
 const CRANES = [
   { size: 64, top: '6%',  right: '4%',  delay: '0s',   dur: '7s'  },
   { size: 44, top: '28%', left: '2%',   delay: '1.8s', dur: '9s'  },
@@ -100,6 +123,24 @@ export default function MinimalPaper({ data, slug }) {
         {/* Floating large ring */}
         <div style={{ position: 'absolute', bottom: '15%', left: '-5%', width: 300, height: 300, borderRadius: '50%', border: `1px solid rgba(200,169,110,0.08)`, animation: 'orbFloat 18s ease-in-out infinite' }} />
         <div style={{ position: 'absolute', top: '10%', right: '-3%', width: 200, height: 200, borderRadius: '50%', border: `1px solid rgba(200,169,110,0.07)`, animation: 'orbFloat 14s ease-in-out 4s infinite reverse' }} />
+
+        {/* Watercolor washes */}
+        {WATERCOLOR.map((w, i) => (
+          <div key={i} style={{ position:'absolute', left:w.left, top:w.top, width:w.w, height:w.h, borderRadius:'60% 40% 70% 30% / 50% 60% 40% 50%', background:w.color, filter:'blur(35px)', animation:`orbFloat ${w.dur} ease-in-out ${w.delay} infinite` }} />
+        ))}
+
+        {/* Botanical branches on edges */}
+        <BotanicalBranch style={{ position:'absolute', left:0, top:'8%', width:72, height:190, opacity:0.9 }} />
+        <BotanicalBranch flip style={{ position:'absolute', right:0, top:'35%', width:72, height:190, opacity:0.8 }} />
+        <BotanicalBranch style={{ position:'absolute', left:'1%', bottom:'8%', width:58, height:150, opacity:0.7 }} />
+        <BotanicalBranch flip style={{ position:'absolute', right:'1%', top:'72%', width:58, height:150, opacity:0.65 }} />
+
+        {/* Scattered dot texture */}
+        <svg className="absolute inset-0 w-full h-full" style={{ opacity:0.06, pointerEvents:'none' }}>
+          {Array.from({length: 60}, (_,i) => (
+            <circle key={i} cx={`${(i * 17 + 5) % 100}%`} cy={`${(i * 13 + 8) % 100}%`} r={1 + (i % 3)} fill="#8b6914" />
+          ))}
+        </svg>
 
         {/* Floating paper cranes */}
         {CRANES.map((c, i) => (

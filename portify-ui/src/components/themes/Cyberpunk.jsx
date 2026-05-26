@@ -76,6 +76,44 @@ function CircuitChip({ skill, i }) {
   )
 }
 
+/* circuit board traces */
+function CircuitTraces() {
+  const cyan = '#00fff5', magenta = '#ff00a0'
+  const nodes = [[140,80],[300,100],[460,80],[620,120],[780,80],[940,100]]
+  const nodes2 = [[100,150],[240,130],[400,160],[560,140],[720,160],[880,140]]
+  return (
+    <svg className="absolute pointer-events-none" style={{ top:'18%', left:0, width:'100%', height:220, opacity:0.12, animation:'circuitPulse 6s ease-in-out infinite' }} viewBox="0 0 1200 220" preserveAspectRatio="none">
+      <polyline points={nodes.map(n=>n.join(',')).join(' ')} fill="none" stroke={cyan} strokeWidth="1.5" />
+      <polyline points={nodes2.map(n=>n.join(',')).join(' ')} fill="none" stroke={magenta} strokeWidth="1" />
+      {/* vertical drops from nodes */}
+      {nodes.map((n,i) => <line key={i} x1={n[0]} y1={n[1]} x2={n[0]} y2={n[1]+30} stroke={cyan} strokeWidth="1" />)}
+      {/* nodes */}
+      {nodes.map((n,i) => <g key={i}><circle cx={n[0]} cy={n[1]} r="5" fill="none" stroke={cyan} strokeWidth="1.5" /><circle cx={n[0]} cy={n[1]} r="2" fill={cyan} /></g>)}
+      {nodes2.map((n,i) => <g key={i}><circle cx={n[0]} cy={n[1]} r="4" fill="none" stroke={magenta} strokeWidth="1" /><circle cx={n[0]} cy={n[1]} r="1.5" fill={magenta} /></g>)}
+    </svg>
+  )
+}
+
+/* second trace row near bottom */
+function CircuitTraces2() {
+  const yellow = '#f0ff00'
+  const nodes = [[60,80],[200,60],[360,90],[520,65],[680,85],[840,60],[1000,80]]
+  return (
+    <svg className="absolute pointer-events-none" style={{ bottom:'22%', left:0, width:'100%', height:120, opacity:0.09, animation:'circuitPulse 8s ease-in-out 3s infinite' }} viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <polyline points={nodes.map(n=>n.join(',')).join(' ')} fill="none" stroke={yellow} strokeWidth="1" />
+      {nodes.map((n,i) => i%2===0 && <g key={i}><circle cx={n[0]} cy={n[1]} r="4" fill="none" stroke={yellow} strokeWidth="1" /><circle cx={n[0]} cy={n[1]} r="1.5" fill={yellow} /></g>)}
+    </svg>
+  )
+}
+
+/* radar pings */
+const PINGS = [
+  { left:'9%',  top:'22%', color:'#00fff5', delay:'0s',   dur:'4s'   },
+  { left:'87%', top:'52%', color:'#ff00a0', delay:'1.8s', dur:'5s'   },
+  { left:'48%', top:'80%', color:'#00fff5', delay:'3.5s', dur:'4.5s' },
+  { left:'70%', top:'15%', color:'#f0ff00', delay:'2.5s', dur:'6s'   },
+]
+
 /* floating neon shapes */
 const SHAPES = Array.from({ length: 8 }, (_, i) => ({
   size: 12 + (i % 3) * 10,
@@ -131,6 +169,27 @@ export default function Cyberpunk({ data, slug }) {
         {/* neon horizontal streaks */}
         <div style={{ position: 'absolute', top: '35%', left: 0, right: 0, height: '1px', background: `linear-gradient(90deg, transparent, ${cyan}20, transparent)`, animation: 'driftX 8s ease-in-out infinite' }} />
         <div style={{ position: 'absolute', top: '65%', left: 0, right: 0, height: '1px', background: `linear-gradient(90deg, transparent, ${magenta}20, transparent)`, animation: 'driftX 10s ease-in-out 2s infinite reverse' }} />
+      </div>
+
+      <CircuitTraces />
+      <CircuitTraces2 />
+
+      {/* Radar pings */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {PINGS.map((p, i) => (
+          <div key={i} style={{ position:'absolute', left:p.left, top:p.top, width:60, height:60, borderRadius:'50%', border:`1px solid ${p.color}`, animation:`radarPing ${p.dur} ease-out ${p.delay} infinite` }} />
+        ))}
+        {/* HUD crosshair decorations */}
+        <div style={{ position:'absolute', top:'8%', left:'50%', transform:'translateX(-50%)', width:40, height:40, opacity:0.15 }}>
+          <div style={{ position:'absolute', top:'50%', left:0, right:0, height:'1px', background:cyan }} />
+          <div style={{ position:'absolute', left:'50%', top:0, bottom:0, width:'1px', background:cyan }} />
+          <div style={{ position:'absolute', inset:8, borderRadius:'50%', border:`1px solid ${cyan}` }} />
+        </div>
+        <div style={{ position:'absolute', bottom:'12%', right:'8%', width:30, height:30, opacity:0.12 }}>
+          <div style={{ position:'absolute', top:'50%', left:0, right:0, height:'1px', background:magenta }} />
+          <div style={{ position:'absolute', left:'50%', top:0, bottom:0, width:'1px', background:magenta }} />
+          <div style={{ position:'absolute', inset:6, borderRadius:'50%', border:`1px solid ${magenta}` }} />
+        </div>
       </div>
 
       <DataStream />

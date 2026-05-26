@@ -12,6 +12,23 @@ const FISH = [
   { emoji: '🐙', size: 24, y: '48%', dur: '35s', delay: '20s',  dir: 1  },
 ]
 
+const JELLYFISH = [
+  { emoji:'🪼', size:32, left:'8%',  top:'12%', delay:'0s',   dur:'6s'  },
+  { emoji:'🪼', size:24, left:'75%', top:'32%', delay:'2.5s', dur:'8s'  },
+  { emoji:'🪼', size:28, left:'42%', top:'52%', delay:'4s',   dur:'7s'  },
+  { emoji:'🪼', size:20, left:'58%', top:'20%', delay:'1.2s', dur:'9s'  },
+  { emoji:'🪼', size:22, left:'22%', top:'68%', delay:'3.5s', dur:'7.5s'},
+]
+
+const LIGHT_RAYS = [
+  { left:'12%',  w:22, delay:'0s',   dur:'9s'  },
+  { left:'30%',  w:15, delay:'2.5s', dur:'12s' },
+  { left:'60%',  w:18, delay:'5s',   dur:'8s'  },
+  { left:'82%',  w:13, delay:'1.5s', dur:'11s' },
+]
+
+const BOTTOM_CREATURES = ['🦑','🐚','🦀','🐚','🦐']
+
 const SEAWEED = [
   { left: '3%',  height: 80, delay: '0s' },
   { left: '7%',  height: 120, delay: '0.5s' },
@@ -127,6 +144,28 @@ export default function DeepOcean({ data, slug }) {
         {/* horizontal light beams */}
         <div style={{ position:'absolute',top:'22%',left:0,right:0,height:50,background:'linear-gradient(180deg,transparent,rgba(0,229,204,0.03),transparent)',animation:'wave 10s ease-in-out infinite',pointerEvents:'none' }} />
         <div style={{ position:'absolute',top:'58%',left:0,right:0,height:35,background:'linear-gradient(180deg,transparent,rgba(0,119,182,0.04),transparent)',animation:'wave 7s ease-in-out 3s infinite reverse',pointerEvents:'none' }} />
+
+        {/* Vertical god rays from surface */}
+        {LIGHT_RAYS.map((r, i) => (
+          <div key={i} style={{ position:'absolute', top:0, left:r.left, width:r.w, height:'70%', background:'linear-gradient(180deg,rgba(0,229,204,0.08) 0%,transparent 100%)', filter:'blur(12px)', animation:`lightRay ${r.dur} ease-in-out ${r.delay} infinite`, transformOrigin:'top center' }} />
+        ))}
+
+        {/* Jellyfish */}
+        {JELLYFISH.map((j, i) => (
+          <div key={i} style={{ position:'absolute', left:j.left, top:j.top, fontSize:j.size, animation:`jellyFloat ${j.dur} ease-in-out ${j.delay} infinite`, pointerEvents:'none', lineHeight:1, filter:'drop-shadow(0 0 6px rgba(0,229,204,0.6))' }}>
+            {j.emoji}
+          </div>
+        ))}
+
+        {/* Bottom sea floor creatures */}
+        <div style={{ position:'absolute', bottom:50, left:0, right:0, display:'flex', justifyContent:'space-around', alignItems:'flex-end', pointerEvents:'none' }}>
+          {BOTTOM_CREATURES.map((e, i) => (
+            <div key={i} style={{ fontSize: 18 + (i % 3) * 4, opacity:0.45, filter:'drop-shadow(0 0 4px rgba(0,229,204,0.3))', animation:`sway ${3.5 + i * 0.5}s ease-in-out ${i * 0.7}s infinite` }}>{e}</div>
+          ))}
+        </div>
+
+        {/* Deep glow at bottom */}
+        <div style={{ position:'absolute', bottom:0, left:'20%', right:'20%', height:120, background:'radial-gradient(ellipse,rgba(0,119,182,0.2) 0%,transparent 70%)', filter:'blur(30px)' }} />
       </div>
 
       <Bubbles />
