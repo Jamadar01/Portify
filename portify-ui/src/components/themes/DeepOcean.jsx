@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import ContactForm from '../ContactForm'
 
 function Bubbles() {
   return (
@@ -29,7 +30,7 @@ function SectionHead({ children, teal }) {
   )
 }
 
-export default function DeepOcean({ data }) {
+export default function DeepOcean({ data, slug }) {
   const { name, role, bio, email, skills, experience = [], projects, education = [], socials } = data
   const teal = '#00e5cc', blue = '#0077b6'
 
@@ -145,12 +146,16 @@ export default function DeepOcean({ data }) {
         {/* Contact */}
         <section className="mb-32 text-center">
           <SectionHead teal={teal}>Get In Touch</SectionHead>
-          <p className="text-blue-300 opacity-70 mb-6">Dive deeper — let's connect and create something extraordinary.</p>
-          {email && (
-            <a href={`mailto:${email}`} className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all hover:scale-105"
-              style={{ background: `linear-gradient(135deg, ${teal}, ${blue})`, boxShadow: `0 0 30px rgba(0,229,204,0.3)`, color: '#0a0e2e' }}>
-              Send a Message 🌊
-            </a>
+          <p className="text-blue-300 opacity-70 mb-8">Dive deeper — let's connect and create something extraordinary.</p>
+          {slug ? (
+            <ContactForm slug={slug} accentColor={teal} bgColor="rgba(0,60,80,0.4)" borderColor="rgba(0,229,204,0.2)" textColor="#e0f7f5" />
+          ) : (
+            email && (
+              <a href={`mailto:${email}`} className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all hover:scale-105"
+                style={{ background: `linear-gradient(135deg, ${teal}, ${blue})`, boxShadow: `0 0 30px rgba(0,229,204,0.3)`, color: '#0a0e2e' }}>
+                Send a Message 🌊
+              </a>
+            )
           )}
         </section>
       </div>

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import ContactForm from '../ContactForm'
 
 function ScanlineOverlay() {
   return (
@@ -19,7 +20,7 @@ function Divider({ color, label }) {
   )
 }
 
-export default function Cyberpunk({ data }) {
+export default function Cyberpunk({ data, slug }) {
   const { name, role, bio, email, skills, experience = [], projects, education = [], socials } = data
   const nameRef = useRef(null)
   const cyan = '#00fff5', magenta = '#ff00a0', yellow = '#f0ff00'
@@ -144,12 +145,16 @@ export default function Cyberpunk({ data }) {
         {/* Contact */}
         <section className="mb-10 text-center">
           <Divider color={magenta} label="<CONTACT/>" />
-          <p className="text-gray-500 mb-6 uppercase tracking-widest text-sm">// READY TO CONNECT — INITIATE TRANSMISSION</p>
-          {email && (
-            <a href={`mailto:${email}`} className="inline-block px-8 py-3 font-black uppercase tracking-widest transition-all hover:scale-105"
-              style={{ border: `2px solid ${magenta}`, color: magenta, background: 'rgba(255,0,160,0.08)', boxShadow: `0 0 30px rgba(255,0,160,0.3)`, fontFamily: "'Share Tech Mono', monospace" }}>
-              SEND MESSAGE ▶
-            </a>
+          <p className="text-gray-500 mb-8 uppercase tracking-widest text-sm">// READY TO CONNECT — INITIATE TRANSMISSION</p>
+          {slug ? (
+            <ContactForm slug={slug} accentColor={magenta} bgColor="rgba(255,0,160,0.05)" borderColor="rgba(255,0,160,0.2)" textColor="#fff" />
+          ) : (
+            email && (
+              <a href={`mailto:${email}`} className="inline-block px-8 py-3 font-black uppercase tracking-widest transition-all hover:scale-105"
+                style={{ border: `2px solid ${magenta}`, color: magenta, background: 'rgba(255,0,160,0.08)', boxShadow: `0 0 30px rgba(255,0,160,0.3)`, fontFamily: "'Share Tech Mono', monospace" }}>
+                SEND MESSAGE ▶
+              </a>
+            )
           )}
         </section>
 

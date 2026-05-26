@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePortfolioStore } from '../lib/portfolioStore'
+import { useAuthStore } from '../lib/authStore'
+import { api } from '../lib/api'
+import AuthModal from '../components/AuthModal'
 
 const THEME_LABELS = {
   cosmic: '🌌 Cosmic',
@@ -197,6 +200,27 @@ const inputClass = "w-full px-3 py-2.5 rounded-lg text-sm bg-white/5 border bord
 export default function Builder() {
   const navigate = useNavigate()
   const { step, setStep, theme, setTheme, data, setData } = usePortfolioStore()
+  const { token } = useAuthStore()
+  const fileRef = useRef(null)
+  const [parsing, setParsing] = useState(false)
+  const [parseError, setParseError] = useState('')
+  const [showAuth, setShowAuth] = useState(false)
+
+  async function handleResumeUpload(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    setParsing(true)
+    setParseError('')
+    try {
+      const res = await api.resume.parse(file)
+      setData(res.data)
+    } catch (err) {
+      setParseError(err.message || 'Failed to parse resume')
+    } finally {
+      setParsing(false)
+      e.target.value = ''
+    }
+  }
 
   return (
     <div
@@ -215,6 +239,13 @@ export default function Builder() {
           Portify
         </div>
       </div>
+
+      {showAuth && (
+        <AuthModal
+          onClose={() => setShowAuth(false)}
+          onSuccess={() => setShowAuth(false)}
+        />
+      )}
 
       <div className="max-w-3xl mx-auto">
         <StepIndicator current={step} />
@@ -251,7 +282,26 @@ export default function Builder() {
                 {THEME_LABELS[theme]}
               </span>
             </div>
-            <p className="text-white/40 text-sm mb-8">Fill in your info below</p>
+            <p className="text-white/40 text-sm mb-6">Fill in your info below</p>
+
+            {/* Resume upload */}
+            <div className="mb-8 p-4 rounded-xl border border-dashed border-white/10 hover:border-violet-500/50 transition-colors"
+              style={{ background: 'rgba(124,58,237,0.04)' }}>
+              <input ref={fileRef} type="file" accept=".pdf" onChange={handleResumeUpload} className="hidden" />
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-white">Upload Resume (PDF)</p>
+                  <p className="text-xs text-white/40 mt-0.5">Auto-fill the form using AI — saves you time</p>
+                </div>
+                <button type="button" onClick={() => fileRef.current?.click()} disabled={parsing}
+                  className="px-4 py-2 rounded-lg text-xs font-semibold transition-all hover:brightness-110 disabled:opacity-50"
+                  style={{ background: 'linear-gradient(135deg,#7c3aed,#a855f7)' }}>
+                  {parsing ? 'Parsing...' : 'Upload PDF'}
+                </button>
+              </div>
+              {parseError && <p className="text-red-400 text-xs mt-3">{parseError}</p>}
+              {parsing && <p className="text-violet-400 text-xs mt-3">Reading your resume with AI...</p>}
+            </div>
 
             <form
               className="space-y-6"

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import ContactForm from '../ContactForm'
 
 function StarField() {
   const canvasRef = useRef(null)
@@ -40,7 +41,7 @@ function SectionTitle({ children }) {
   )
 }
 
-export default function Cosmic({ data }) {
+export default function Cosmic({ data, slug }) {
   const { name, role, bio, email, skills, experience = [], projects, education = [], socials } = data
 
   const cardStyle = {
@@ -166,13 +167,17 @@ export default function Cosmic({ data }) {
         {/* Contact */}
         <section className="mb-10 text-center">
           <SectionTitle>Contact</SectionTitle>
-          <p className="text-gray-400 mb-6">Open to opportunities — let's build something stellar.</p>
-          {email && (
-            <a href={`mailto:${email}`}
-              className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all hover:scale-105"
-              style={{ background: 'linear-gradient(135deg, #7c3aed, #a855f7)', boxShadow: '0 0 30px rgba(124,58,237,0.4)' }}>
-              Say Hello ✉
-            </a>
+          <p className="text-gray-400 mb-8">Open to opportunities — let's build something stellar.</p>
+          {slug ? (
+            <ContactForm slug={slug} accentColor="#7c3aed" bgColor="rgba(255,255,255,0.05)" borderColor="rgba(168,85,247,0.25)" textColor="#e9d5ff" />
+          ) : (
+            email && (
+              <a href={`mailto:${email}`}
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold transition-all hover:scale-105"
+                style={{ background: 'linear-gradient(135deg, #7c3aed, #a855f7)', boxShadow: '0 0 30px rgba(124,58,237,0.4)' }}>
+                Say Hello ✉
+              </a>
+            )
           )}
           <div className="flex justify-center gap-6 mt-8 flex-wrap">
             {socials.github && <a href={socials.github} target="_blank" rel="noreferrer" className="text-sm hover:text-white transition-colors" style={{ color: '#a855f7' }}>GitHub</a>}

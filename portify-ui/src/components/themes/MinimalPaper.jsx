@@ -8,7 +8,9 @@ function Divider({ label }) {
   )
 }
 
-export default function MinimalPaper({ data }) {
+import ContactForm from '../ContactForm'
+
+export default function MinimalPaper({ data, slug }) {
   const { name, role, bio, email, skills, experience = [], projects, education = [], socials } = data
   const gold = '#8b6914', lightGold = '#c8a96e'
 
@@ -122,14 +124,18 @@ export default function MinimalPaper({ data }) {
         {/* Contact */}
         <Divider label="Contact" />
         <section className="mb-16 text-center">
-          <p className="mb-6 leading-relaxed" style={{ color: '#555', fontSize: '15px' }}>
+          <p className="mb-8 leading-relaxed" style={{ color: '#555', fontSize: '15px' }}>
             I'm always open to interesting conversations and new opportunities.
           </p>
-          {email && (
-            <a href={`mailto:${email}`} className="inline-block px-8 py-3 text-sm uppercase tracking-widest transition-all hover:opacity-80"
-              style={{ background: '#0d0d0d', color: '#faf8f5', letterSpacing: '2px' }}>
-              Get In Touch
-            </a>
+          {slug ? (
+            <ContactForm slug={slug} accentColor={gold} bgColor="#f0ece5" borderColor="#e2ddd8" textColor="#1a1a1a" />
+          ) : (
+            email && (
+              <a href={`mailto:${email}`} className="inline-block px-8 py-3 text-sm uppercase tracking-widest transition-all hover:opacity-80"
+                style={{ background: '#0d0d0d', color: '#faf8f5', letterSpacing: '2px' }}>
+                Get In Touch
+              </a>
+            )
           )}
           <div className="flex justify-center gap-8 mt-8 flex-wrap">
             {socials.github && <a href={socials.github} target="_blank" rel="noreferrer" className="text-xs uppercase tracking-widest transition-all hover:opacity-60" style={{ color: gold }}>/github</a>}
